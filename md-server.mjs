@@ -643,14 +643,15 @@ const server = http.createServer(async (req, res) => {
           Connection: 'keep-alive',
         });
 
-        const [cmd, ...cmdArgs] = AGENT_COMMAND.split(' ');
+        // Parse command line into executable and arguments
+        const [cmd, ...cmdArgs] = AGENT_COMMAND.trim().split(/\s+/);
         const finalArgs = [...cmdArgs, prompt];
-        console.log(`[agent] Executing: ${cmd} ${finalArgs.join(' ').slice(0, 80)}...`);
+        console.log(`[agent] Executing: ${cmd} ${cmdArgs.join(' ')} "<prompt: ${prompt.length} chars>"`);
 
         const child = spawn(cmd, finalArgs, {
           cwd: ROOT,
           env: process.env,
-          shell: true,
+          shell: false,
         });
 
         let fullOutput = '';
