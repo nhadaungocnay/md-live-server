@@ -85,8 +85,10 @@ function resolveDocsDir() {
   if (cliDir) return path.resolve(ROOT, cliDir);
 
   if (process.env.DOCS_DIR) return path.resolve(ROOT, process.env.DOCS_DIR);
-  if (fs.existsSync(path.join(ROOT, '_workspace'))) return path.join(ROOT, '_workspace');
+  if (fs.existsSync(path.join(ROOT, 'sample'))) return path.join(ROOT, 'sample');
+  if (fs.existsSync(path.join(ROOT, 'samples'))) return path.join(ROOT, 'samples');
   if (fs.existsSync(path.join(ROOT, 'docs'))) return path.join(ROOT, 'docs');
+  if (fs.existsSync(path.join(ROOT, '_workspace'))) return path.join(ROOT, '_workspace');
   return ROOT;
 }
 
