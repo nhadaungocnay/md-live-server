@@ -84,7 +84,10 @@ function resolveDocsDir() {
   const cliDir = getArgValue(['--dir', '-d'], null) || args.find(a => !a.startsWith('-'));
   if (cliDir) return path.resolve(ROOT, cliDir);
 
-  if (process.env.DOCS_DIR) return path.resolve(ROOT, process.env.DOCS_DIR);
+  if (process.env.DOCS_DIR) {
+    const envDir = path.resolve(ROOT, process.env.DOCS_DIR);
+    if (fs.existsSync(envDir)) return envDir;
+  }
   if (fs.existsSync(path.join(ROOT, 'sample'))) return path.join(ROOT, 'sample');
   if (fs.existsSync(path.join(ROOT, 'samples'))) return path.join(ROOT, 'samples');
   if (fs.existsSync(path.join(ROOT, 'docs'))) return path.join(ROOT, 'docs');
