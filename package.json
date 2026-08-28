@@ -1,0 +1,35 @@
+{
+  "name": "md-live-server",
+  "version": "1.0.0",
+  "description": "Live Markdown Documentation Server with Real-time Rendering, Text Annotation & AI Agent Integration",
+  "main": "md-server.mjs",
+  "type": "module",
+  "bin": {
+    "md-live-server": "./md-server.mjs",
+    "md2html": "./md2html.mjs"
+  },
+  "scripts": {
+    "start": "node md-server.mjs",
+    "dev": "node --watch md-server.mjs",
+    "convert": "node md2html.mjs",
+    "convert:all": "node md2html.mjs --all"
+  },
+  "keywords": [
+    "markdown",
+    "live-server",
+    "docs-viewer",
+    "ai-agent",
+    "antigravity",
+    "notes",
+    "converter",
+    "html"
+  ],
+  "author": "nhadaungocnay",
+  "license": "MIT",
+  "dependencies": {
+    "marked": "^15.0.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
