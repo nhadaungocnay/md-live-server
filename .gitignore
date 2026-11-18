@@ -22,3 +22,9 @@ npm-debug.log*
 
 # Temporary notes folder
 .notes/
+
+# Local app runtime state & dropped workspace
+.md-server-config.json
+.dropped/
+.server.log
+._*

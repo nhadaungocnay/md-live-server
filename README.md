@@ -1,24 +1,28 @@
 # 🚀 MD Live Server (`md-live-server`)
 
-> **Live Markdown Documentation Server & Converter with Real-time Rendering, Highlight Annotation & AI Agent Integration.**
+> **Local Markdown Viewer App & Live Documentation Server with Native Picker, Drag & Drop, Real-time Live Reload, Highlight Annotation & AI Agent Integration.**
 
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Zero Build](https://img.shields.io/badge/build-zero--step-orange.svg)]()
 
-`md-live-server` là giải pháp gọn nhẹ, hiệu năng cao giúp bạn xem, tra cứu tài liệu Markdown (`.md`) trực tiếp trên trình duyệt theo thời gian thực mà không cần build, đồng thời tích hợp sẵn công cụ ghi chú và giao tiếp trực tiếp với **AI Agent (Google Antigravity, Claude Code, custom CLI)**.
+`md-live-server` là ứng dụng local gọn nhẹ giúp bạn xem, tra cứu tài liệu Markdown (`.md`) trực tiếp trên trình duyệt theo thời gian thực mà **không cần cấu hình `.env` thủ công**, tích hợp chọn thư mục/file từ giao diện, kéo thả (Drag & Drop), ghi chú nhanh và giao tiếp trực tiếp với **AI Agent (Google Antigravity, Claude Code, custom CLI)**.
 
 ---
 
 ## ✨ Tính năng nổi bật
 
-- ⚡ **Live Markdown Preview**: Đọc và render Markdown trực tiếp ngay khi lưu file, không cần convert hay reload server.
-- 📂 **Cây thư mục trực quan & Tìm kiếm nhanh**: Duyệt toàn bộ cấu trúc thư mục tài liệu với ô search filter thời gian thực.
-- 📝 **Highlight-to-Note**: Bôi đen bất kỳ đoạn văn bản nào trên trang để mở popup ghi chú tức thì.
-- 🤖 **Tích hợp AI Agent Streaming (SSE)**: Gửi đoạn trích + chỉ thị trực tiếp đến AI Agent (như `agy --continue --print`), phản hồi được stream về giao diện web theo thời gian thực.
-- 💾 **Lưu trữ ghi chú tự động**: Mọi ghi chú và phản hồi từ AI Agent đều được lưu thành file `.md` trong thư mục `.notes/` để đối soát.
-- 📄 **CLI Convert tĩnh (`md2html`)**: Đi kèm script convert Markdown sang HTML độc lập (standalone) không cần server.
-- ⚙️ **Hỗ trợ `.env` & CLI Flags toàn diện**: Cấu hình linh hoạt qua file `.env` hoặc truyền tham số dòng lệnh.
+- 🖱️ **Click-to-Run Local App**: Double-click vào **`MD Live Server.app`** (macOS) hoặc `Start MD Live Server.command` / `Start MD Live Server.bat` để tự khởi chạy server ngầm và mở trình duyệt ngay lập tức. Nếu server đã chạy sẵn, app tự động mở tab mới mà không báo lỗi trùng cổng.
+- 📂 **Chọn Thư mục / File trực tiếp trên giao diện**:
+  - Nút **Chọn thư mục** / **Chọn file** mở hộp thoại Finder (macOS), Explorer (Windows) hoặc Zenity/KDialog (Linux).
+  - Nút **Nhập đường dẫn thủ công** hỗ trợ dán nhanh đường dẫn tuyệt đối hoặc dạng `~/...`.
+- 📥 **Kéo & Thả (Drag & Drop) toàn màn hình**: Kéo thả 1 file `.md` lẻ, nhiều file hoặc cả thư mục chứa nhiều thư mục con trực tiếp vào cửa sổ trình duyệt để xem ngay.
+- 🕒 **Tự nhớ & Lịch sử thư mục gần đây**: Tự động lưu thư mục đang mở và danh sách `recentDirs` vào `.md-server-config.json` (không cần file `.env`).
+- 🔄 **Live Reload (SSE)**: Tự động cập nhật nội dung đang đọc ngay khi file `.md` trên ổ cứng thay đổi.
+- 🔍 **Cây thư mục trực quan & Tìm kiếm nhanh**: Duyệt toàn bộ cấu trúc thư mục tài liệu với ô search filter thời gian thực.
+- 📝 **Highlight-to-Note & 🤖 AI Agent Streaming (SSE)**: Bôi đen bất kỳ đoạn văn bản nào trên trang để tạo ghi chú hoặc gửi chỉ thị trực tiếp đến AI Agent.
+- 🔌 **Nút tắt Server ngay trên web**: Chủ động dừng server chạy ngầm bất cứ lúc nào từ footer thanh bên trái.
+- 📄 **CLI Convert tĩnh (`md2html`)**: Đi kèm script convert Markdown sang HTML độc lập (standalone).
 
 ---
 
@@ -40,56 +44,33 @@ npm install
 
 ---
 
-## ⚙️ Cấu hình `.env`
-
-Tạo file `.env` từ file mẫu `.env.example`:
-
-```bash
-cp .env.example .env
-```
-
-### Bảng biến môi trường hỗ trợ:
-
-| Biến môi trường | Mặc định | Ý nghĩa / Mô tả |
-| :--- | :--- | :--- |
-| `PORT` | `3456` | Cổng HTTP Server sẽ lắng nghe |
-| `HOST` | `localhost` | Host binding (`localhost` hoặc `0.0.0.0`) |
-| `DOCS_DIR` | `./_workspace` | Đường dẫn thư mục chứa các file tài liệu Markdown |
-| `NOTES_DIR` | `<DOCS_DIR>/.notes` | Thư mục lưu các ghi chú tạo từ web viewer |
-| `AGENT_ENABLED` | `true` | Bật / tắt tính năng gọi AI Agent (`true`/`false`) |
-| `AGENT_COMMAND` | `agy --continue --print` | Lệnh CLI kích hoạt AI Agent |
-
-#### Ví dụ file `.env`:
-
-```ini
-PORT=3456
-HOST=localhost
-DOCS_DIR=./_workspace
-AGENT_ENABLED=true
-AGENT_COMMAND=agy --continue --print
-```
-
----
-
 ## 🚀 Hướng dẫn sử dụng
 
-### 1. Khởi động Web Server xem tài liệu trực tiếp
+### Cách 1: Mở như một App Local (Khuyên dùng)
+
+- **macOS**: Double-click vào **`MD Live Server.app`** (có thể kéo vào Dock để dùng hàng ngày) hoặc **`Start MD Live Server.command`**.
+- **Windows**: Double-click vào **`Start MD Live Server.bat`**.
+- **Từ dòng lệnh**:
+  ```bash
+  npm run app
+  ```
+
+App sẽ tự động:
+1. Khởi chạy web server tại `http://localhost:3456` (tự động tăng port nếu cổng bị chiếm bởi ứng dụng khác).
+2. Tự động mở trình duyệt mặc định.
+3. Nhớ thư mục tài liệu bạn đã mở ở lần trước.
+
+### Cách 2: Chạy qua CLI & Tùy chọn dòng lệnh
 
 ```bash
-# Chạy với cấu hình trong .env
+# Chạy server thông thường (không tự mở trình duyệt)
 npm start
 
-# Hoặc chạy ở chế độ dev (auto-reload khi code server thay đổi)
-npm run dev
-```
+# Khởi động và tự mở trình duyệt
+node md-server.mjs --open
 
-Truy cập trên trình duyệt: **`http://localhost:3456`**
-
-#### Các tùy chọn dòng lệnh (CLI Options):
-
-```bash
 # Xem tài liệu trong thư mục cụ thể
-node md-server.mjs ./docs
+node md-server.mjs ./docs --open
 
 # Đổi cổng và host
 node md-server.mjs -p 8080 -H 0.0.0.0
@@ -103,12 +84,26 @@ node md-server.mjs --agent-cmd "claude --continue"
 
 ---
 
-### 2. Chuyển đổi Markdown sang HTML tĩnh (`md2html`)
+## ⚙️ Cấu hình `.env` (Tùy chọn)
 
-Nếu bạn cần xuất tài liệu ra các file `.html` độc lập để gửi cho đối tác hoặc mở offline:
+Bạn **không cần** tạo file `.env` nếu chọn thư mục trực tiếp trên giao diện. File `.env` vẫn được hỗ trợ làm cấu hình dự phòng nếu muốn cố định cổng, lệnh AI Agent hoặc đường dẫn mặc định:
+
+| Biến môi trường | Mặc định | Ý nghĩa / Mô tả |
+| :--- | :--- | :--- |
+| `PORT` | `3456` | Cổng HTTP Server sẽ lắng nghe |
+| `HOST` | `localhost` | Host binding (`localhost` hoặc `0.0.0.0`) |
+| `DOCS_DIR` | `./sample` | Đường dẫn dự phòng nếu chưa chọn thư mục trên UI |
+| `NOTES_DIR` | `<currentDir>/.notes` | Thư mục lưu các ghi chú tạo từ web viewer |
+| `AGENT_ENABLED` | `true` | Bật / tắt tính năng gọi AI Agent (`true`/`false`) |
+| `AGENT_COMMAND` | `agy --continue --print` | Lệnh CLI kích hoạt AI Agent |
+| `AUTO_OPEN` | `false` | Tự động mở trình duyệt khi chạy (`true`/`false`) |
+
+---
+
+### Chuyển đổi Markdown sang HTML tĩnh (`md2html`)
 
 ```bash
-# Chuyển đổi toàn bộ tài liệu trong DOCS_DIR
+# Chuyển đổi toàn bộ tài liệu trong thư mục mặc định
 npm run convert
 
 # Chuyển đổi 1 file cụ thể và tự động mở trình duyệt
@@ -122,13 +117,13 @@ node md2html.mjs ./docs
 
 ## 🤖 Tích hợp AI Agent hoạt động như thế nào?
 
-1. Khi bạn duyệt tài liệu trên `http://localhost:3456`, bôi đen một đoạn nội dung (ví dụ: một lỗi logic, một yêu cầu nghiệp vụ cần sửa).
-2. Popup ghi chú sẽ xuất hiện -> Nhập yêu cầu của bạn (ví dụ: *"Kiểm tra lại logic tính thuế này và cập nhật TASK-102"*).
+1. Khi bạn duyệt tài liệu trên web, bôi đen một đoạn nội dung bất kỳ.
+2. Popup ghi chú sẽ xuất hiện -> Nhập yêu cầu của bạn.
 3. Nhấn **"Gửi Agent"**:
-   - Hệ thống tự động tạo một file log ghi chú trong `<DOCS_DIR>/.notes/`.
+   - Hệ thống tự động tạo một file log ghi chú trong `<currentDir>/.notes/`.
    - Lệnh `AGENT_COMMAND` (mặc định `agy --continue --print`) được gọi ngầm dưới nền.
    - Quá trình suy luận và câu trả lời của Agent được **stream qua Server-Sent Events (SSE)** về khung chat nổi góc dưới màn hình.
-   - Kết quả phản hồi cũng được tự động append vào file log để lưu vết (provenance).
+   - Kết quả phản hồi cũng được tự động append vào file log để lưu vết.
 
 ---
 
@@ -136,26 +131,17 @@ node md2html.mjs ./docs
 
 ```text
 md-live-server/
-├── .env.example         # File mẫu cấu hình biến môi trường
-├── .env                 # File cấu hình biến môi trường cục bộ (không commit)
-├── .gitignore           # Danh sách file / thư mục bỏ qua khi commit
-├── LICENSE              # Giấy phép MIT
-├── package.json         # Định nghĩa package và dependencies
-├── README.md            # Tài liệu hướng dẫn sử dụng
-├── md-server.mjs        # Core Web Server & AI Agent streaming engine
-└── md2html.mjs          # CLI Batch Converter Markdown -> Static HTML
+├── MD Live Server.app/          # macOS click-to-run Local App bundle
+├── Start MD Live Server.command # macOS click-to-run Terminal launcher
+├── Start MD Live Server.bat     # Windows click-to-run launcher
+├── .env.example                 # File mẫu cấu hình biến môi trường (tùy chọn)
+├── .gitignore                   # Danh sách file / thư mục bỏ qua khi commit
+├── LICENSE                      # Giấy phép MIT
+├── package.json                 # Định nghĩa package và dependencies
+├── README.md                    # Tài liệu hướng dẫn sử dụng
+├── md-server.mjs                # Core Web Server, Pickers, Drop & AI Agent engine
+└── md2html.mjs                  # CLI Batch Converter Markdown -> Static HTML
 ```
-
----
-
-## 🛠️ Đóng góp & Phát triển
-
-Mọi đóng góp, báo lỗi (Issues) và Pull Requests đều được hoan nghênh!
-1. Fork repository
-2. Tạo branch mới (`git checkout -b feature/amazing-feature`)
-3. Commit thay đổi (`git commit -m 'feat: add amazing feature'`)
-4. Push lên branch (`git push origin feature/amazing-feature`)
-5. Tạo Pull Request
 
 ---
 

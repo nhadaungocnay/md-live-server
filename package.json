@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "node md-server.mjs",
+    "app": "node md-server.mjs --open",
     "dev": "node --watch md-server.mjs",
     "convert": "node md2html.mjs",
     "convert:all": "node md2html.mjs --all"
